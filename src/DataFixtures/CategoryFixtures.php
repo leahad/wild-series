@@ -9,25 +9,25 @@ use App\Entity\Category;
 class CategoryFixtures extends Fixture
 {
 const CATEGORIES = [
-'Action & Adventure',
-'Animated series',
+'Adventure',
+'Animated',
 'Comedy',
+'Drama',
 'Documentary',
-'Fictional Crime',
+'Crime',
 'Horror',
 'Romcom',
-'Sci-fi & Fantasy',
-    ];
+'SF',
+];
 
-    public function load(ObjectManager $manager)
-    {
-        foreach(self::CATEGORIES as $key => $categoryName) {
+public function load(ObjectManager $manager)
+{
+    foreach(self::CATEGORIES as $key => $categoryName) {
         $category = new Category();
         $category->setName($categoryName);
-
         $manager->persist($category);
+        $this->addReference('category_' . $categoryName, $category);
     }
-
     $manager->flush();
 
     }

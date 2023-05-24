@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category #{{ category.name }}{% endblock %}
+
+{% block body %}
+    <div class="media">
+        {% for program in programs %}
+            <img class="align-self-start mr-3" src="{{ program.poster }}" alt="{{ program.title }} poster">
+                <div class="media-body">
+                    <h1 class="mt-0"> {{ program.id}} / {{ program.title }}</h1>
+                    <a href="{{ path("program_show", { id: program.id }) }}"> see more </a>
+                </div>
+        {% else %}
+        no Tv show found
+        {% endfor %}
+    </div>
+
+    <a href="{{ path('program_index') }}">
+        Back to the programs list
+    </a>
+{% endblock %}
