@@ -19,13 +19,13 @@ const PROGRAMS = [
 
     public function load(ObjectManager $manager): void
     {
-        foreach(self::PROGRAMS as $program => $column) { 
+        foreach(self::PROGRAMS as $key => $column) { 
         $program = new Program();
         $program->setTitle($column['title']);
         $program->setSynopsis($column['synopsis']);
         $program->setCategory($this->getReference('category_' . $column['category']));
         $manager->persist($program);
-        $this->addReference('program_' . $column['title'], $program);
+        $this->addReference('program_' . $key+1, $program);
     }
     $manager->flush();
     }

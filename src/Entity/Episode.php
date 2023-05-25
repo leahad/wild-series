@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -23,7 +24,7 @@ class Episode
     #[ORM\Column]
     private ?int $number = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type:Types::TEXT)]
     private ?string $synopsis = null;
 
     public function getId(): ?int

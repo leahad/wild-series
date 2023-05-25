@@ -38,7 +38,7 @@ class ProgramController extends AbstractController
     ]);
     }
 
-    #[Route('/{programId}/seasons/{seasonId}', methods: ['GET'], name: 'season_show')]
+    #[Route('/show/{programId}/seasons/{seasonId}', methods: ['GET'], name: 'season_show')]
     public function showSeason(int $programId, int $seasonId, ProgramRepository $programRepository, SeasonRepository $seasonRepository, EpisodeRepository $episodeRepository): Response
     {
         $program = $programRepository->findOneBy(['id' => $programId]);

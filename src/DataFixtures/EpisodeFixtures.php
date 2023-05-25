@@ -6,23 +6,24 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Episode;
+use Faker\Factory;
 
 class EpisodeFixtures extends Fixture implements DependentFixtureInterface
 {
-    const EPISODES = [
-        ['season' => '1', 'title' => 'Chapter One: The Vanishing of Will Byers', 'number' => '1', 'synopsis' =>'At the U.S. Dept. of Energy an unexplained event occurs. Then when a young Dungeons and Dragons playing boy named Will disappears after a night with his friends, his mother Joyce and the town of Hawkins are plunged into darkness.'],
-        ['season' => '1', 'title' => 'Chapter Two: The Weirdo on Maple Street', 'number' => '2', 'synopsis' =>'Mike hides the mysterious girl in his house. Joyce gets a strange phone call.'],
-    ];
-
     public function load(ObjectManager $manager): void
     {
-        foreach(self::EPISODES as $episode => $column) { 
-            $episode = new Episode();
-            $episode->setTitle($column['title']);
-            $episode->setNumber($column['number']);
-            $episode->setSynopsis($column['synopsis']);
-            $episode->setSeason($this->getReference('season_' . $column['season']));
-            $manager->persist($episode);   
+        $faker = Factory::create();
+        for($programNumber = 1; $programNumber <= 5; $programNumber++) {
+            for($seasonNumber = 1; $seasonNumber <= 5; $seasonNumber++) {
+                for($episodeNumber = 1; $episodeNumber <= 10; $episodeNumber++) {
+                    $episode = new Episode();
+                    $episode->setTitle($faker->word());
+                    $episode->setNumber($episodeNumber);
+                    $episode->setSynopsis($faker->paragraphs(3, true));
+                    $episode->setSeason($this->getReference('season_' . $seasonNumber . '_program_' . $programNumber));
+                    $manager->persist($episode);   
+                }
+            }
         }
         $manager->flush();
     }
