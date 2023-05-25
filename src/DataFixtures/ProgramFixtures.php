@@ -25,6 +25,7 @@ const PROGRAMS = [
         $program->setSynopsis($column['synopsis']);
         $program->setCategory($this->getReference('category_' . $column['category']));
         $manager->persist($program);
+        $this->addReference('program_' . $column['title'], $program);
     }
     $manager->flush();
     }
