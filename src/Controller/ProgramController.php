@@ -12,6 +12,7 @@ use App\Repository\EpisodeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -37,6 +38,9 @@ class ProgramController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
         $programRepository->save($program, true); 
+
+        $this->addFlash('success', 'The new program has been created');
+
         return $this->redirectToRoute('program_index');
     }
 
@@ -60,6 +64,38 @@ class ProgramController extends AbstractController
         'seasons' => $seasons,
     ]);
     }
+
+    #[Route('/show/{program}/edit', methods: ['GET', 'POST'], name: 'edit')]
+    public function edit(Request $request, Program $program, ProgramRepository $programRepository): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $programRepository->save($program, true);
+
+            $this->addFlash('success', 'The program has been edited');
+
+            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/show/{id}', methods: ['POST'], name: 'delete')]
+    public function delete(Request $request, Program $program, programRepository $programRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {
+            $programRepository->remove($program, true);
+            $this->addFlash('danger', 'The program has been deleted');
+        }
+
+        return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 
     #[Route('/{program}/seasons/{season}', methods: ['GET'], name: 'season_show')]
     public function showSeason(Program $program, Season $season, EpisodeRepository $episodeRepository): Response
