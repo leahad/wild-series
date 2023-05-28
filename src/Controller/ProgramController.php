@@ -50,9 +50,9 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/show/{id<\d+>}', methods: ['GET'], name: 'show')]
-    public function show(Program $program, SeasonRepository $seasonRepository): Response
+    public function show(Program $program): Response
     {
-        $seasons = $seasonRepository->findBy(['program' => $program]);
+        // $seasons = $seasonRepository->findBy(['program' => $program]);
 
         if (!$program) {
         throw $this->createNotFoundException(
@@ -61,7 +61,7 @@ class ProgramController extends AbstractController
     }
     return $this->render('program/show.html.twig', [
         'program' => $program,
-        'seasons' => $seasons,
+        // 'seasons' => $seasons,
     ]);
     }
 
