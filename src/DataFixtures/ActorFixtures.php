@@ -24,7 +24,7 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
                 $actor->addProgram($this->getReference('program_' . $faker->randomNumber(1,5)));
                 }
                 $manager->persist($actor);
-                $this->addReference('actor_' . $faker->randomNumber(1,10), $actor);
+                // $this->addReference('actor_' . $faker->randomNumber(1,10), $actor);
             }
         $manager->flush();
     }
