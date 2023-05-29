@@ -15,17 +15,17 @@ class ActorFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create();
 
-            for($actorNumber = 1; $actorNumber <= 10; $actorNumber++) {
-                for($programNumber = 1; $programNumber <= 3; $programNumber++) {
-                $actor = new Actor();
-                $firstName = $faker->firstName;
-                $lastName = $faker->lastName;
-                $actor->setName($firstName . ' ' . $lastName);
-                $actor->addProgram($this->getReference('program_' . $faker->randomNumber(1,5)));
-                }
-                $manager->persist($actor);
-                $this->addReference('actor_' . $faker->randomNumber(1,10), $actor);
+        for($programNumber = 1; $programNumber <= 3; $programNumber++) {
+            for($actorNumber = 1; $actorNumber <= 3; $actorNumber++) {
+            $actor = new Actor();
+            $firstName = $faker->firstName;
+            $lastName = $faker->lastName;
+            $actor->setName($firstName . ' ' . $lastName);
+            $actor->addProgram($this->getReference('program_' . $programNumber));
+            $manager->persist($actor);
             }
+            // $this->addReference('actor_' . $actorNumber, $actor);
+        }
         $manager->flush();
     }
 
