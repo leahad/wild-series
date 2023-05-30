@@ -11,7 +11,7 @@
         <p>description : {{ season.description }} </p>
         <ul>
             {% for episode in episodes %}
-                <li><a href="{{ path("program_episode_show", { program: program.id, season: season.id, episode: episode.id }) }}"> {{ episode.number }} / {{ episode.title }}</a></li>
+                <li><a href="{{ path("program_episode_show", { slug: program.slug, season: season.id, episode: episode.id }) }}"> {{ episode.number }} / {{ episode.title }}</a></li>
             {% else %}
                 no episode found
             {% endfor %}

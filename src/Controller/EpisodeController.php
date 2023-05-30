@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/episode')]
 class EpisodeController extends AbstractController
@@ -22,13 +23,15 @@ class EpisodeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_episode_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EpisodeRepository $episodeRepository): Response
+    public function new(Request $request, EpisodeRepository $episodeRepository, SluggerInterface $slugger): Response
     {
         $episode = new Episode();
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($episode->getTitle());
+            $episode->setSlug($slug);
             $episodeRepository->save($episode, true);
 
             $this->addFlash('success', 'The new episode has been created');
@@ -42,21 +45,24 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_episode_show', methods: ['GET'])]
-    public function show(Episode $episode): Response
+    #[Route('/{slug}', name: 'app_episode_show', methods: ['GET'])]
+    public function show(Episode $episode, $slug): Response
     {
         return $this->render('episode/show.html.twig', [
             'episode' => $episode,
+            'slug'=> $slug,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_episode_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Episode $episode, EpisodeRepository $episodeRepository): Response
+    #[Route('/{slug}/edit', name: 'app_episode_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Episode $episode, EpisodeRepository $episodeRepository, SluggerInterface $slugger,$slug): Response
     {
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($episode->getTitle());
+            $episode->setSlug($slug);
             $episodeRepository->save($episode, true);
 
             $this->addFlash('success', 'The episod has been edited');
@@ -67,11 +73,12 @@ class EpisodeController extends AbstractController
         return $this->render('episode/edit.html.twig', [
             'episode' => $episode,
             'form' => $form,
+            'slug'=> $slug,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_episode_delete', methods: ['POST'])]
-    public function delete(Request $request, Episode $episode, EpisodeRepository $episodeRepository): Response
+    #[Route('/{slug}', name: 'app_episode_delete', methods: ['POST'])]
+    public function delete(Request $request, Episode $episode, EpisodeRepository $episodeRepository, $slug): Response
     {
         if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
             $episodeRepository->remove($episode, true);
