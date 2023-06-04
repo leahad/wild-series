@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Episode;
 use App\Entity\Program;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -42,17 +43,33 @@ class ProgramRepository extends ServiceEntityRepository
 //    /**
 //     * @return Program[] Returns an array of Program objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function CalculProgramDuration($program): array
+   {
+    $conn = $this->getEntityManager()->getConnection();
+
+    $sql = '
+        SELECT program.title, SUM(episode.duration) AS total_duration
+        FROM program
+        JOIN season ON program.id = season.program_id
+        JOIN episode ON season.id = episode.season_id
+        GROUP BY program.id
+        ';
+    $stmt = $conn->prepare($sql);
+    $resultSet = $stmt->executeQuery(['program' => $program]);
+
+    // returns an array of arrays (i.e. a raw data set)
+    return $resultSet->fetchAllAssociative();
+}
+
+    //    return $this->createQueryBuilder('p')
+    //        ->andWhere('p.id = :val')
+    //        ->setParameter('program', $program)
+    //        ->join('season.id', 'season')
+    //        ->join('episode.duration', 'episodes')
+    //     //    ->GroupBy()
+    //        ->getQuery()
+    //        ->getResult()
+    //    ;
 
 //    public function findOneBySomeField($value): ?Program
 //    {

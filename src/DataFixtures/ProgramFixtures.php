@@ -12,7 +12,7 @@ use Symfony\Component\String\UnicodeString;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
-    const PROGRAMS = [
+    const DATAS = [
         ['title' => 'Stranger Things', 'synopsis' => 'Stranger Things is set in the fictional rural town of Hawkins, Indiana, in the 1980s.', 'category' => 'SF'],
         ['title' => 'The Haunting of the Hill House', 'synopsis' => 'The plot alternates between two timelines, following five adult siblings whose paranormal experiences at Hill House continue to haunt them in the present day, and flashbacks depicting events leading up to the eventful night in 1992 when the family fled from the mansion.', 'category' => 'Horror'],
         ['title' => 'Games of Thrones', 'synopsis' => 'The plot revolves around two continents namely, Westeros (the western continent) and Essos (the eastern continent). Noble families of Westeros fight amongst themselves to gain the Iron Throne. And, meanwhile an old enemy which has been dormant for ages is rising again.', 'category' => 'SF'],
@@ -29,17 +29,18 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        foreach(self::PROGRAMS as $key => $column) { 
+        foreach(self::DATAS as $data) { 
             $program = new Program();
-            $program->setTitle($column['title']);
-            $program->setSynopsis($column['synopsis']);
-            $program->setCategory($this->getReference('category_' . $column['category']));
-            $program->setSlug($this->slugger->slug($column['title']));
+            $program->setTitle($data['title']);
+            $program->setSynopsis($data['synopsis']);
+            $program->setCategory($this->getReference('category_' . $data['category']));
+            $program->setSlug($this->slugger->slug($data['title'])->lower());
             $manager->persist($program);
-            $this->addReference('program_' . $key+1, $program);
+            $this->addReference('program_' . $program->getSlug(), $program);
             }
     $manager->flush();
     }
+
 
     public function getDependencies()
     {

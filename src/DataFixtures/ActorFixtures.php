@@ -7,26 +7,29 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ActorFixtures extends Fixture implements DependentFixtureInterface
 {
-    
+    public function __construct(private SluggerInterface $slugger) {}
+
     public function load(ObjectManager $manager): void
     {
-
         $faker = Factory::create();
 
-            for($actorNumber = 1; $actorNumber <= 3; $actorNumber++) {
-                for($programNumber = 1; $programNumber <= 3; $programNumber++) {
-                $actor = new Actor();
-                $firstName = $faker->firstName;
-                $lastName = $faker->lastName;
-                $actor->setName($firstName . ' ' . $lastName);
-                $actor->addProgram($this->getReference('program_' . $programNumber));
-                $manager->persist($actor);
-                }
-                // $this->addReference('actor_' . $faker->randomNumber(1,10), $actor);
+        for($actorNumber = 0; $actorNumber < 10; $actorNumber++) {
+            $actor = new Actor();
+            $actor->setName($faker->firstName. ' ' . $faker->lastName);
+            
+            $programs = ProgramFixtures::DATAS;
+            shuffle($programs);
+
+            for($i = 0 ; $i < 3; $i++) {
+                $actor->addProgram($this->getReference('program_' . $this->slugger->slug($programs[$i]['title'])->lower()));
             }
+
+            $manager->persist($actor);
+        }
         $manager->flush();
     }
 

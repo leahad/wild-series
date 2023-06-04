@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Actor;
 use App\Entity\Program;
 use App\Entity\Episode;
 use App\Entity\Season;
 use App\Form\ProgramType;
+use App\Repository\ActorRepository;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
@@ -55,7 +57,6 @@ class ProgramController extends AbstractController
     #[Route('/show/{slug}', methods: ['GET'], name: 'show')]
     public function show($slug,Program $program, ProgramDuration $programDuration): Response
     {
-        // $seasons = $seasonRepository->findBy(['program' => $program]);
 
         if (!$program) {
         throw $this->createNotFoundException(
@@ -64,9 +65,8 @@ class ProgramController extends AbstractController
     }
     return $this->render('program/show.html.twig', [
         'program' => $program,
-        'programDuration' => $programDuration->calculate($program),
+        // 'programDuration' => $programDuration->calculate($program),
         'slug' => $slug,
-        // 'seasons' => $seasons,
     ]);
     }
 

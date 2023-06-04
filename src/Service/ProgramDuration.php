@@ -2,24 +2,28 @@
 
 namespace App\Service;
 
-use App\Entity\Program;
-use App\Repository\ProgramRepository;
 use App\Entity\Episode;
-use App\Entity\Season;
+use App\Entity\Program;
+use App\Entity\season;
 use App\Repository\EpisodeRepository;
+use App\Repository\ProgramRepository;
+use App\Repository\SeasonRepository;
+use Proxies\__CG__\App\Entity\Season as EntitySeason;
 
 class ProgramDuration {
 
-    // private Episode $episode;
-    
-    // private Season $season;
+  private ProgramRepository $programRepository;
 
-    public function calculate(Program $program, EpisodeRepository $episodeRepository): string
-    {   
-      $seasons = $program->getSeasons();
-      $episodes = $episodeRepository->findbySeason();
+  public function __construct(programRepository $programRepository)
+  {
+    $this->programRepository = $programRepository;
+  }
 
-        return 'coming soon'; 
-    }
+  public function calculate($program) {
+
+    $programDuration = $this->programRepository->calculProgramDuration($program);
+    return $programDuration;
+
+  }
     
 }

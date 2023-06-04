@@ -21,17 +21,21 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
-        for($programNumber = 1; $programNumber <= 5; $programNumber++) {
+
+        foreach(ProgramFixtures::DATAS as $data) {
             for($seasonNumber = 1; $seasonNumber <= 5; $seasonNumber++) {
+                $program = $this->slugger->slug($data['title'])->lower();
+                $season = $this->getReference('season_' . $seasonNumber . '_program_' . $program);
+
                 for($episodeNumber = 1; $episodeNumber <= 10; $episodeNumber++) {
-                    $episode = new Episode();
-                    $episode = $episode->setTitle($faker->sentence(3));
-                    $episode->setNumber($episodeNumber);
-                    $episode->setDuration($faker->randomNumber(2,true));
-                    $episode->setSynopsis($faker->paragraphs(3, true));
-                    $episode->setSeason($this->getReference('season_' . $seasonNumber . '_program_' . $programNumber));
-                    $episode->setSlug($this->slugger->slug($episode->getTitle()));
-                    $manager->persist($episode);   
+                        $episode = new Episode();
+                        $episode = $episode->setTitle($faker->sentence(3));
+                        $episode->setNumber($episodeNumber);
+                        $episode->setDuration($faker->randomNumber(2,true));
+                        $episode->setSynopsis($faker->paragraphs(3, true));
+                        $episode->setSeason($season);
+                        $episode->setSlug($this->slugger->slug($episode->getTitle())->lower());
+                        $manager->persist($episode);   
                 }
             }
         }
