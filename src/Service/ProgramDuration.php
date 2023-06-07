@@ -19,11 +19,20 @@ class ProgramDuration {
     $this->programRepository = $programRepository;
   }
 
-  public function calculate($program) {
+  public function calculate(Program $program) {
 
-    $programDuration = $this->programRepository->calculProgramDuration($program);
-    return $programDuration;
-
+    $seasons = $program->getSeasons();
+    $total = 0;
+    foreach($seasons as $season) {
+      $episodes = $season->getEpisodes();
+        foreach($episodes as $episode) {
+          $total += $episode->getDuration(); 
+      }  
+    }
+    // $day = $total/60/24;
+    // $hour = $day%60;
+    // return $day .''. $hour;
+    return $total . 'minutes';
   }
     
 }

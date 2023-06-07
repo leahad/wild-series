@@ -7,11 +7,10 @@
     <img class="align-self-start mr-3" src="{{ program.poster }}" alt="{{ program.title }} poster">
     <div class="media-body">
         <h1 class="mt-0"> {{ program.title }} </h1>
-        <p>season : {{ season.number }} / {{ season.year }} </p>
-        <p>description : {{ season.description }} </p>
         <ul>
             {% for episode in episodes %}
-                <li><a href="{{ path("program_episode_show", { slug: program.slug, season: season.id, episode: episode.id }) }}"> {{ episode.number }} / {{ episode.title }}</a></li>
+                {# <li><a href="{{ path("program_episode_show", { slug: program.slug, season: season.id, episode: episode.id }) }}"> {{ episode.number }} / {{ episode.title }}</a></li> #}
+                <p>{{ episode.number }} / {{ episode.title }}</p>
             {% else %}
                 no episode found
             {% endfor %}

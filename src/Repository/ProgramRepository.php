@@ -43,33 +43,38 @@ class ProgramRepository extends ServiceEntityRepository
 //    /**
 //     * @return Program[] Returns an array of Program objects
 //     */
-   public function CalculProgramDuration($program): array
-   {
-    $conn = $this->getEntityManager()->getConnection();
+// public function CalculProgramDuration($program)
+// {
+//     return $this->createQueryBuilder('p')
+//     ->select('SUM(episode.duration) AS EpisodesDuration')
+//     ->andWhere('program.id = :program')
+//     ->setParameter('program', $program)
+//     ->join('season', 's')
+//     ->where('p.id = s.p.id')
+//     ->join('episode', 'e')
+//     ->where('s.id = e.s.id')
+//     ->GroupBy('p.id')
+//     ->getQuery()
+//     ->getOneOrNullResult()
+//     ;
+// }
 
-    $sql = '
-        SELECT program.title, SUM(episode.duration) AS total_duration
-        FROM program
-        JOIN season ON program.id = season.program_id
-        JOIN episode ON season.id = episode.season_id
-        GROUP BY program.id
-        ';
-    $stmt = $conn->prepare($sql);
-    $resultSet = $stmt->executeQuery(['program' => $program]);
+//     public function CalculProgramDuration(int $program)
+//     {
+//     $conn = $this->getEntityManager()->getConnection();
 
-    // returns an array of arrays (i.e. a raw data set)
-    return $resultSet->fetchAllAssociative();
-}
+//     $sql = '
+//         SELECT SUM(episode.duration)
+//         FROM program
+//         JOIN season ON program.id = season.program_id
+//         JOIN episode ON season.id = episode.season_id
+//         GROUP BY program.id
+//         ';
+//     $stmt = $conn->prepare($sql);
+//     $resultSet = $stmt->executeQuery(['program' => $program]);
 
-    //    return $this->createQueryBuilder('p')
-    //        ->andWhere('p.id = :val')
-    //        ->setParameter('program', $program)
-    //        ->join('season.id', 'season')
-    //        ->join('episode.duration', 'episodes')
-    //     //    ->GroupBy()
-    //        ->getQuery()
-    //        ->getResult()
-    //    ;
+//     return $resultSet->fetchOne();
+// }
 
 //    public function findOneBySomeField($value): ?Program
 //    {
