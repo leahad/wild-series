@@ -36,13 +36,19 @@
             <button class="btn btn-light" type="submit">Search</button>
         </form>
         <div class="d-flex flex-row-reverse">
-            <form class="container-fluid justify-content-start">
-                <button class="btn btn-secondary" id="login" type="button">login</button>
-                {# <button type="button" class="btn btn-light">Logout</button> #}
+            {% if app.user %}
+                <p class="mb-0">  {{ app.user.email }} </p>
+                {# <img src="" alt=""> #}
+                <form action="{{ path('app_logout') }}" method="post">
+                    <button type="submit" class="btn btn-light">Logout</button>
+                </form>
+            {% else %}
+            <form action="{{ path('app_login') }}" class="container-fluid justify-content-start">
+                <button class="btn btn-secondary" id="login" type="submit">login</button>
             </form>
+            {% endif %}
         </div>
-        {# <p class="mb-0">Jane Doe </p>
-        <img src="" alt=""> #}
+        
     </div>
 </div>
 {% endblock %}

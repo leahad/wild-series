@@ -13,7 +13,33 @@
     </div>
 </div>
 
-    <a href="{{ path('program_index') }}">
+{% if app.user %}
+<div class="media mt-4">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Add Comment</button>
+    {{ form_end(form) }}
+</div>
+{% endif %}
+
+
+<div class="media mt-4">
+    <strong>Comments :</strong>
+        {% for comment in episode.comments %}
+            <div class="card mt-4" style="width: 35rem;">
+                <div class="card-body">
+                    <p> rate : {{ comment.rate }}</p> 
+                    <p> comment : {{ comment.comment }}</p> 
+                    <small> author : {{ comment.author.email }}</small> 
+                </div>
+            </div>
+        {% else %}
+            <li>no comment for this episode</li>
+        {% endfor %}
+        </ul>
+</div>
+
+    <a class="" href="{{ path('program_index') }}">
         Back to the programs list
     </a>
 {% endblock %}
