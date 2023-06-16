@@ -3,10 +3,11 @@
 {% block title %}All programs{% endblock %}
 
 {% block body %}
-    <h1>Every TV shows</h1>
+<div class="media">
+    <h1>Welcome!</h1>
     {% for program in programs %}
         <div>
-            <h2> {{ loop.index}} / {{ program.title}} - Category: {{ program.category.name }}</h2>
+            <h2 class="mt-4"> {{ loop.index}} / {{ program.title}} - Category: {{ program.category.name }}</h2>
             <p>{{ program.synopsis }}</p>
             <a href="{{ path("program_show", { slug: program.slug }) }}"> see more </a>
         </div>
@@ -19,4 +20,5 @@
         <a href="{{ path('app_index') }}">
         Back to the hompage
     </a>
+</div>
 {% endblock %}

@@ -22,7 +22,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
-#[Route('/program', name: 'program_')]
+#[Route('/', name: 'program_')]
 class ProgramController extends AbstractController
 {
     #[Route('/', name: 'index')]
