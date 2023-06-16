@@ -8,7 +8,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\Program;
 use Faker\Factory;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\String\UnicodeString;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -29,16 +28,23 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        // $faker = Factory ::create();
+
         foreach(self::DATAS as $data) { 
             $program = new Program();
+
             $program->setTitle($data['title']);
             $program->setSynopsis($data['synopsis']);
             $program->setCategory($this->getReference('category_' . $data['category']));
             $program->setSlug($this->slugger->slug($data['title'])->lower());
+            $program->setOwner($this->getReference('user_' . UserFixtures::USERS[array_rand(UserFixtures::USERS)]['email']));
+            
             $manager->persist($program);
+
             $this->addReference('program_' . $program->getSlug(), $program);
-            }
-    $manager->flush();
+        }
+        
+        $manager->flush();
     }
 
 
@@ -47,6 +53,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         // Tu retournes ici toutes les classes de fixtures dont ProgramFixtures dépend
         return [
         CategoryFixtures::class,
+        UserFixtures::class,
         ];
     }
 

@@ -2,40 +2,29 @@
 
 namespace App\Controller;
 
-use App\Entity\Actor;
 use App\Entity\Comment;
 use App\Entity\Program;
 use App\Entity\Episode;
 use App\Entity\Season;
-use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\ProgramType;
-use App\Repository\ActorRepository;
 use App\Repository\CommentRepository;
 use App\Repository\ProgramRepository;
-use App\Repository\SeasonRepository;
 use App\Repository\EpisodeRepository;
 use App\Service\ProgramDuration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
 {
-    // public function __construct(
-        // Avoid calling getFirewallConfig() in the constructor: auth may not
-        // be complete yet. Instead, store the entire Security object.
-    //     private Security $security,
-    // ) {
-    // }
-
     #[Route('/', name: 'index')]
     public function index(ProgramRepository $programRepository): Response
     {
@@ -56,6 +45,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
         $slug = $slugger->slug($program->getTitle());
         $program->setSlug($slug);
+        $program->setOwner($this->getUser());
         $programRepository->save($program, true); 
 
         $this->addFlash('success', 'The new program has been created');
@@ -94,18 +84,23 @@ class ProgramController extends AbstractController
     #[Route('/show/{slug}/edit', methods: ['GET', 'POST'], name: 'edit')]
     public function edit(Request $request, Program $program, ProgramRepository $programRepository, SluggerInterface $slugger, $slug): Response
     {
-        $form = $this->createForm(ProgramType::class, $program);
-        $form->handleRequest($request);
+        if ($this->getUser() !== $program->getOwner()) {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
+        } else {
+            $form = $this->createForm(ProgramType::class, $program);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $slug = $slugger->slug($program->getTitle());
-            $program->setSlug($slug);
-            $programRepository->save($program, true);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $slug = $slugger->slug($program->getTitle());
+                $program->setSlug($slug);
+                $programRepository->save($program, true);
 
-            $this->addFlash('success', 'The program has been edited');
+                $this->addFlash('success', 'The program has been edited');
 
-            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
-        }
+                return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+            }
+        }   
 
         return $this->render('program/edit.html.twig', [
             'program' => $program,
@@ -164,16 +159,15 @@ class ProgramController extends AbstractController
             $comment->setEpisode($episode);
             $comment->setAuthor($user);
             $commentRepository->save($comment, true);
-            
-        }
+            }
+                
+                return $this->render('program/episode_show.html.twig', [
+                    'form' => $form,
+                    'episode' => $episode,
+                    'program' => $program,
+                    'season' => $season,
+                    'slug'=>$slug,
+                ]);
+            }
 
-            return $this->render('program/episode_show.html.twig', [
-                'form' => $form,
-                'program' => $program,
-                'slug'=> $slug,
-                'season' => $season,
-                'episode' => $episode,
-            ]);
         }
-    }
-

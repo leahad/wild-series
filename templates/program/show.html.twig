@@ -12,7 +12,7 @@
         <p>duration : {{ programDuration }}</p>
         <ul>
             {% for season in program.seasons %}
-                <li><a href="{{ path("program_season_show", { slug: program.slug, season: season.id }) }}"> Season {{ season.number }} </a></li>
+                <li><a href="{{ path("program_season_show", { slug: program.slug, season: season.id}) }}"> Season {{ season.number }} </a></li>
             {% else %}
                 no season found
         {% endfor %}
@@ -29,7 +29,9 @@
     </div>
 </div>
 
+{% if is_granted("ROLE_ADMIN") %}
     <a href="{{ path("program_edit", { slug: program.slug }) }}">edit</a>
+{% endif %}
 
     <a href="{{ path('program_index') }}">
         Back to the programs list

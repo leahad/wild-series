@@ -15,10 +15,7 @@
 
 {% if app.user %}
 <div class="media mt-4">
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit">Add Comment</button>
-    {{ form_end(form) }}
+{{ include('program/_form.html.twig') }}
 </div>
 {% endif %}
 
@@ -31,6 +28,11 @@
                     <p> rate : {{ comment.rate }}</p> 
                     <p> comment : {{ comment.comment }}</p> 
                     <small> author : {{ comment.author.email }}</small> 
+                        {% if app.user %}   
+                            {% if app.user.email == comment.author.email or app.user.email == 'admin@monsite.com' %}         
+                                <a href="{{ path("comment_edit", {comment:comment.id }) }}">edit</a>
+                            {% endif %}
+                        {% endif %}
                 </div>
             </div>
         {% else %}
