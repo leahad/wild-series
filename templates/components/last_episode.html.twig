@@ -1,0 +1,24 @@
+<div{{ attributes }}>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Last Episodes</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+    
+        <div class="offcanvas-body">
+            {% for episode in this.episodes %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5> {{ episode.number }} - {{ episode.title }} </h5>
+                        <h6>{{ episode.season.program.title }}<br><h6>
+                        <p> Season #{{ episode.season.number }}</p><br>
+                    </div>
+                </div>  
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>

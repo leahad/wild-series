@@ -6,18 +6,9 @@
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-3 me-auto mb-2 mb-lg-0">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Aventure</a></li>
-                    <li><a class="dropdown-item" href="#">Comedy</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
+        <ul class="navbar-nav ms-4 me-auto mb-2 mb-lg-0">
+                {{ component('navbar') }}
+            {# <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Actors
                 </a>
@@ -26,29 +17,28 @@
                     <li><a class="dropdown-item" href="#">Alyson Stoner</a></li>
                     <li><a class="dropdown-item" href="#">Alyvia Alyn Lind</a></li>
                 </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Watchlist</a>
+            </li> #}
+            <li class="nav-item ms-4">
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Last Episodes</button>
             </li>
         </ul>
         <div class="d-flex flex-row-reverse">
             {% if app.user %}
                 <div> 
                 <form action="{{ path('app_logout') }}" method="post">
-                    <button type="submit" class="btn btn-light">My accompt</button>
+                    <button type="submit" class="btn btn-outline-dark ms-4">My accompt</button>
                 </form>
                 </div>
                     <form action="{{ path('app_logout') }}" method="post">
-                    <button type="submit" class="btn btn-light">Logout</button>
+                    <button type="submit" class="btn btn-outline-light">Logout</button>
                 </form>
             {% else %}
             <form action="{{ path('app_login') }}" class="container-fluid justify-content-start">
-                <button class="btn btn-secondary" id="login" type="submit">login</button>
+                <button class="btn btn-outline-light" id="login" type="submit">Login</button>
             </form>
             {% endif %}
-            <button {{ stimulus_action('theme', 'toggleDarkMode')}}>dark mode</button>
+            {# <button {{ stimulus_action('theme', 'toggleDarkMode')}}>dark mode</button> #}
         </div>
-        
     </div>
 </div>
 {% endblock %}

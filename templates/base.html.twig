@@ -26,8 +26,14 @@
                 </div>
             {% endfor %}
         {% endfor %}
+
     <div id="swup">
+        <aside>
+            {{ component('last_episode') }}
+        </aside>
+
         {% block body %}{% endblock %}
+
     </div>
 
     </body>

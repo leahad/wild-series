@@ -3,20 +3,13 @@ $primary-color: #4F5A68;
 $secondary-color: #D9D9D9;
 $background-color: #F8F9FF;
 $navbar-text-color: #3B3C3F;
-$light: #dddddd;
-$dark: #011100;
 
 nav {
     font-weight:700;
-    color:$navbar-text-color;
 }
 
 #logo span {
     font-size: 1.6rem;
-}
-
-#login {
-    background-color: $navbar-text-color;
 }
 
 .media {
