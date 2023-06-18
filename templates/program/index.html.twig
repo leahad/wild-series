@@ -4,7 +4,13 @@
 
 {% block body %}
 <div class="media">
-    <h1>Welcome!</h1>
+    <h1>Welcome to Wild Series! </h1>
+    <h3 class="mt-4"> The best website to find out the latest news about
+        <span {{ stimulus_controller('symfony/ux-typed', {
+            strings: ['your ❤ Tv shows', 'your ❤  actors',' the last trended programs',]
+        }) }}></span>  
+    </h3>
+
     {% for program in programs %}
         <div>
             <h2 class="mt-4"> {{ loop.index}} / {{ program.title}} - Category: {{ program.category.name }}</h2>
