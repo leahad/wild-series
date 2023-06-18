@@ -3,11 +3,8 @@ $primary-color: #4F5A68;
 $secondary-color: #D9D9D9;
 $background-color: #F8F9FF;
 $navbar-text-color: #3B3C3F;
-
-
-@import "~bootswatch/dist/morph/variables";
-@import "~bootstrap/scss/bootstrap";
-@import "~bootswatch/dist/morph/bootswatch"; 
+$light: #dddddd;
+$dark: #011100;
 
 nav {
     font-weight:700;
@@ -25,4 +22,9 @@ nav {
 .media {
     margin-left: 2rem;
 }
+
+@import "~bootswatch/dist/morph/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/morph/bootswatch"; 
+
 

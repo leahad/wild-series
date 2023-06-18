@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -14,7 +14,7 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body {{ stimulus_controller('theme') }} {{ stimulus_target('theme', 'body') }}>
         <header> 
         {% include '_navbar.html.twig' %}
         </header>
