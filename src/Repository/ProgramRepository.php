@@ -40,49 +40,16 @@ class ProgramRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Program[] Returns an array of Program objects
-//     */
-// public function CalculProgramDuration($program)
-// {
-//     return $this->createQueryBuilder('p')
-//     ->select('SUM(episode.duration) AS EpisodesDuration')
-//     ->andWhere('program.id = :program')
-//     ->setParameter('program', $program)
-//     ->join('season', 's')
-//     ->where('p.id = s.p.id')
-//     ->join('episode', 'e')
-//     ->where('s.id = e.s.id')
-//     ->GroupBy('p.id')
-//     ->getQuery()
-//     ->getOneOrNullResult()
-//     ;
-// }
+    public function findLikeName(string $name)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where('p.title LIKE :name')
+            ->orWhere('a.name LIKE :name')
+            ->join('p.actors', 'a')
+            ->setParameter('name', '%' . $name . '%')
+            ->orderBy('p.title', 'ASC')
+            ->getQuery();
 
-//     public function CalculProgramDuration(int $program)
-//     {
-//     $conn = $this->getEntityManager()->getConnection();
-
-//     $sql = '
-//         SELECT SUM(episode.duration)
-//         FROM program
-//         JOIN season ON program.id = season.program_id
-//         JOIN episode ON season.id = episode.season_id
-//         GROUP BY program.id
-//         ';
-//     $stmt = $conn->prepare($sql);
-//     $resultSet = $stmt->executeQuery(['program' => $program]);
-
-//     return $resultSet->fetchOne();
-// }
-
-//    public function findOneBySomeField($value): ?Program
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    return $queryBuilder->getResult();
+    }
 }
